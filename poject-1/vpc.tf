@@ -1,6 +1,6 @@
 # Resource-1: create VPC
 resource "aws_vpc" "Project-1-VPC" {
-  cidr_block       = var.CSD-vpc_cidir
+  cidr_block       = "10.0.0.0/16"
   enable_dns_hostnames = true
   tags = {
     Name = "Project-1-VPC"
@@ -10,7 +10,7 @@ resource "aws_vpc" "Project-1-VPC" {
 # Resource-2: create Subnet
 resource "aws_subnet" "Project-1-VPC-Pub-sbn" {
   vpc_id     = aws_vpc.Project-1-VPC.id
-  cidr_block = var.CSD-pub-sbn_cidir
+  cidr_block = "10.0.0.0/24"
   availability_zone = "us-east-2b"
   map_public_ip_on_launch = true
     tags = {

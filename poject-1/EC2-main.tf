@@ -29,8 +29,8 @@ resource "aws_security_group" "project-SG" {
 # Resource-8: Creat Ubuntu 18.04
 resource "aws_instance" "Master-VM" {
   ami           = "ami-0a59f0e26c55590e9"
-  instance_type = var.instance_type
-  key_name      = var.key_name
+  instance_type = "t2.medium"
+  key_name      = "XXXXXXXXXXX"
   subnet_id     = aws_subnet.Project-1-VPC-Pub-sbn.id
   vpc_security_group_ids = [aws_security_group.project-SG.id]
 
@@ -43,8 +43,8 @@ resource "aws_instance" "Master-VM" {
 # Resource-9: Create Ubuntu 18.04 Server
 resource "aws_instance" "Worker-1" {
   ami           = "ami-0a59f0e26c55590e9"
-  instance_type = var.instance_type
-  key_name      = var.key_name
+  instance_type = "t2.medium"
+  key_name      = "XXXXXXXXXXXX"
   subnet_id     = aws_subnet.Project-1-VPC-Pub-sbn.id
   vpc_security_group_ids = [aws_security_group.project-SG.id]
 
@@ -57,8 +57,8 @@ resource "aws_instance" "Worker-1" {
 # Resource-10: Create Ubuntu 18.04
 resource "aws_instance" "Worker-2" {
   ami           = "ami-0a59f0e26c55590e9"
-  instance_type = var.instance_type
-  key_name      = var.key_name
+  instance_type = "t2.medium"
+  key_name      = "XXXXXXXXXXX"
   subnet_id     = aws_subnet.Project-1-VPC-Pub-sbn.id
   vpc_security_group_ids = [aws_security_group.project-SG.id]
 

@@ -2,24 +2,32 @@
 #    https://kubernetes.io/docs/reference/networking/ports-and-protocols/
 
 
-Setting up for Kubernetes
+# Setting up for Kubernetes
      apt-get update -y
- Installing all the Utilities to manage all the binaries in all system
+
+ # Installing all the Utilities to manage all the binaries in all system
    apt install -y apt-transport-https ca-certificates curl software-properties-common
- Setting up Docker Repo in all system 
+
+ # Setting up Docker Repo in all system 
   curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
- Adding Docker Repo in all system
+
+# Adding Docker Repo in all system
 add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable"
-   update again in all system
+
+#   update again in all system
    apt-get update -y
-  set up local cache for Docker on all systems
+
+#  set up local cache for Docker on all systems
   apt-cache policy docker-ce
-Intall docker on all systems
+
+# Intall docker on all systems
      apt install -y docker-ce
-verify docker installation on all system 
+
+# verify docker installation on all system 
   which docker     = ( /usr/bin/docker => this is what we are looking for.)
    ls /etc/docker 
-setting up docker in systemd to use systemctl or service cmd on all systems
+
+# setting up docker in systemd to use systemctl or service cmd on all systems
 
  cat <<EOF | sudo tee /etc/docker/daemon.json
  {
@@ -27,68 +35,76 @@ setting up docker in systemd to use systemctl or service cmd on all systems
  }
  EOF
 
-Enabling the docker service
+# Enabling the docker service
      systemctl enable --now docker
-Adding ubuntu user locally accross the board
+
+# Adding ubuntu user locally accross the board
 usermod -aG docker ubuntu
-Restarting docker deamon on all systems
+
+# Restarting docker deamon on all systems
     systemctl restart docker
     systemctl status docker
 
-We will need to turn off swapoff "t2-medium" to allow kubelet agent or kubectl intallation.
+# We will need to turn off swapoff "t2-medium" to allow kubelet agent or kubectl intallation.
   swapoff -a
-Persisting swapoff configuration using Fs tab table
-#    sed -i '/ swap / s/^\(.*\)$/#\1/g' /etc/fstab
-Set up Network bridge for Kubernetes 
+
+# Persisting swapoff configuration using Fs tab table
+  sed -i '/ swap / s/^\(.*\)$/#\1/g' /etc/fstab
+
+# Set up Network bridge for Kubernetes 
   sysctl net.bridge.bridge-nf-call-iptables=1
 
-1. Pulling the Repo for Kubernetes accross the board 
-#     curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
+# 1. Pulling the Repo for Kubernetes accross the board 
+    curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
 
-2. Pulling the Repo for Kubernetes accross the board 
-#     cat <<EOF | sudo tee /etc/apt/sources.list.d/kubernetes.list
-#     deb https://apt.kubernetes.io/ kubernetes-xenial main
-#     EOF
- update again all system
+# 2. Pulling the Repo for Kubernetes accross the board 
+        cat <<EOF | sudo tee /etc/apt/sources.list.d/kubernetes.list
+        deb https://apt.kubernetes.io/ kubernetes-xenial main
+        EOF
+
+# update again all system
    apt-get update -y
 
-Installing kubelet, kubectl and kubeadm on all systems { but kubeadmin will be initialize at the level of the Master}
-#    apt install -y kubelet kubeadm kubectl
-putting on hold kubelet, kubectl and kubeadm so they not be updated automatically on all
-#    sudo apt-mark hold kubelet kubeadm kubectl
-Adding kubectl for auto complete 
+# Installing kubelet, kubectl and kubeadm on all systems { but kubeadmin will be initialize at the level of the Master}
+    apt install -y kubelet kubeadm kubectl
+
+# putting on hold kubelet, kubectl and kubeadm so they not be updated automatically on all
+    sudo apt-mark hold kubelet kubeadm kubectl
+
+# Adding kubectl for auto complete 
  echo "source <(kubectl completion bash)" >> ~/.bashrc
 
-Update the file for back up on All system
-#     mv /etc/containerd/config.toml /etc/containerd/config.toml.bak
+# Update the file for back up on All system
+        mv /etc/containerd/config.toml /etc/containerd/config.toml.bak
 
-#     systemctl restart containerd
+        systemctl restart containerd
 
-pull down all the images serving the master Node components e.g kubecontoler mgr, kubeapi server, etcd, kube scheduler only at the level of the Master
-All of this only on Master
+# pull down all the images serving the master Node components e.g kubecontoler mgr, kubeapi server, etcd, kube scheduler 
+# only at the level of the Master, All of this only on Master
 
-#    ls /etc/containerd/
-#    systemctl restart containerd
-#     kubeadm config images pull
-Initializing the master node only on master node 
- #      kubeadm init
+    ls /etc/containerd/
+    systemctl restart containerd
+    kubeadm config images pull
 
-To start using ur cluster run the following as user(ubuntu) on mater  (cd /home/ubuntu/)
-  #     Run: cd ../..     or   cd /home/ubuntu
+# Initializing the master node only on master node 
+         kubeadm init
 
-#      mkdir -p $HOME/.kube  
-#      sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config  
-#      sudo chown $(id -u):$(id -g) $HOME/.kube/config
+# To start using ur cluster run the following as user(ubuntu) on mater  (cd /home/ubuntu/)
+        Run: cd ../..     or   cd /home/ubuntu
+
+         mkdir -p $HOME/.kube  
+         sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config  
+         sudo chown $(id -u):$(id -g) $HOME/.kube/config
 
 
-  Then you can join any number of worker nodes by running the following on each as root:n the two workers nodes
+# Then you can join any number of worker nodes by running the following on each as root:on the two workers nodes
 
 kubeadm join 10.0.0.85:6443 --token 7qdt3g.cf97l626514r3t83 --discovery-token-ca-cert-hash sha256:45b89e0022eefac5a50146c31a837484019323da2ca2530494837ca9c7c0cde7 
 
 sudo kubeadm join 10.0.0.162:6443 --token 3qmspf.0ojumpwxuo773wn4 --discovery-token-ca-cert-hash sha256:bbe5372807bbadb6ca5a8073267835cea812f89ec702c7bf2e805bfb90392499 
 
-To create or apply object declaratively only on master 
-#   kubectl apply -f https://github.com/weaveworks/weave/releases/download/v2.8.1/weave-daemonset-k8s.yaml
+# To create or apply object declaratively only on master 
+   kubectl apply -f https://github.com/weaveworks/weave/releases/download/v2.8.1/weave-daemonset-k8s.yaml
 
 
 to genrate new token 
@@ -103,4 +119,4 @@ To see the cluster
 
 To start the kubelet on all servers i.e Master, Worker-1 and Worker-2 
 ssh to all servers and restart 
-#       systemctl restart kubelet
+          systemctl restart kubelet
