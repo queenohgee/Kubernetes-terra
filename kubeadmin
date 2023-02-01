@@ -77,24 +77,23 @@ usermod -aG docker ubuntu
 # Update the file for back up on All system
         mv /etc/containerd/config.toml /etc/containerd/config.toml.bak
 
-        systemctl restart containerd
+        systemctl restart containerd                                   -------> run it on all the server
 
 # pull down all the images serving the master Node components e.g kubecontoler mgr, kubeapi server, etcd, kube scheduler 
 # only at the level of the Master, All of this only on Master
 
     ls /etc/containerd/
-    systemctl restart containerd
-    kubeadm config images pull
+    kubeadm config images pull                                                     -------> run it only on Master Node
 
 # Initializing the master node only on master node 
-         kubeadm init
+         kubeadm init                                                              -------> run it only on Master Node
 
 # To start using ur cluster run the following as user(ubuntu) on mater  (cd /home/ubuntu/)
-        Run: cd ../..     or   cd /home/ubuntu
+         Run: cd ../..     or   cd /home/ubuntu                                   -------> run it only on Master Node
 
-         mkdir -p $HOME/.kube  
-         sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config  
-         sudo chown $(id -u):$(id -g) $HOME/.kube/config
+         mkdir -p $HOME/.kube                                                     -------> run it only on Master Node
+         sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config                 -------> run it only on Master Node
+         sudo chown $(id -u):$(id -g) $HOME/.kube/config                          -------> run it only on Master Node
 
 
 # Then you can join any number of worker nodes by running the following on each as root:on the two workers nodes
