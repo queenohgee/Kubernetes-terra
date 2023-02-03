@@ -83,25 +83,46 @@ add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu bi
  echo "source <(kubectl completion bash)" >> ~/.bashrc
 
 # Update the file for back up on All system
+<<<<<<< HEAD
 mv /etc/containerd/config.toml /etc/containerd/config.toml.bak
+=======
+        mv /etc/containerd/config.toml /etc/containerd/config.toml.bak
+
+        systemctl restart containerd                                   -------> run it on all the server
+>>>>>>> origin/main
 
 # pull down all the images serving the master Node components e.g kubecontoler mgr, kubeapi server, etcd, kube scheduler 
 # only at the level of the Master, All of this only on Master
 
     ls /etc/containerd/
+<<<<<<< HEAD
 
     systemctl restart containerd
 
     kubeadm config images pull
+=======
+    kubeadm config images pull                                                     -------> run it only on Master Node
+>>>>>>> origin/main
 
 
 # Initializing the master node only on master node 
+<<<<<<< HEAD
  kubeadm init
 
 # To start using ur cluster run the following as user(ubuntu) on mater  (cd /home/ubuntu/)
 Run:  cd /home/ubuntu
 
  mkdir -p $HOME/.kube
+=======
+         kubeadm init                                                              -------> run it only on Master Node
+
+# To start using ur cluster run the following as user(ubuntu) on mater  (cd /home/ubuntu/)
+         Run: cd ../..     or   cd /home/ubuntu                                   -------> run it only on Master Node
+
+         mkdir -p $HOME/.kube                                                     -------> run it only on Master Node
+         sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config                 -------> run it only on Master Node
+         sudo chown $(id -u):$(id -g) $HOME/.kube/config                          -------> run it only on Master Node
+>>>>>>> origin/main
 
  sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
  
